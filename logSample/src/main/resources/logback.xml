@@ -1,0 +1,33 @@
+<configuration>
+
+	<property name="ROOT_LEVEL" value="${LOG_LEVEL:-INFO}"/>
+	<property name="APPENDER_NAME" value="${APPENDER_NAME:-FILE}"/>
+	<property name="LOG_HOME" value="logs"/>
+
+	<!-- logback設定読み込み中のメッセージを抑止 -->
+	<statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/application.log</file>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/application.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%date [%level] [%logger{15}] %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date [%level] %logger{15} - %message%n%xException{5}</pattern>
+		</encoder>
+	</appender>
+
+	<root level="${ROOT_LEVEL}">
+		<appender-ref ref="${APPENDER_NAME}"/>
+	</root>
+
+</configuration>
